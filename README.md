@@ -120,7 +120,7 @@ ReactDOM.render(<App />, root);
 setCount((current) => current+1);
 ```
 
-## Example: Unit conversion
+## Practice: Unit conversion
 ### jsx 쓸 때 주의해야 할 점
 * JS에서 이미 선점된 문법 용어를 사용할 수 없다.
 > class -> className
@@ -175,6 +175,8 @@ const flip = () => {
 ```
 
 ### Final Practice
+#### 구조
+* KmsToMiles(){}와 MinutesToHours(){}를 만들고 App()에서 두 컴포넌트를 품었다.
 #### select
 ```js
 const [index, setIndex] = React.useState("0");
@@ -190,3 +192,68 @@ const selectIndex = (event) => {
   {index === "1" ? <KmsToMiles/> : null}
 </div>
 ```
+
+# PROPS
+## Understanding props
+* 부모 컴포넌트로부터 자식 컴포넌트에게 데이터를 보낼 수 있게 해주는 방법
+* 컴포넌트를 사용할 때 인자로 프로퍼티를 넣을 수 있는데 그 인자를 __props__ 라고 한다.
+  + 즉 ```<Btn nameOfBtn="Save Changes"/>``` 이런 식으로 ```nameOfBtn```이라는 프로퍼티를 임의로 만들었을 때 실제 컴포넌트에서 ```function Btn(props){}```인자로 받아와서 쓴다.
+  + 여기서는 ```{props.nameOfBtn}``` 이렇게 사용할 수 있다.
+  + ```function Btn({nameOfBtn, color, ..}){}``` 이런 식으로도 사용할 수 있다. props는 오브젝트니까.
+* 이벤트리스너인지 props인지 구분해야 함
+  + 예를 들어 ```<Btn nameOfBtn={value} onClick={changeValue}/>```에서 onClick은 컴포넌트 안에 있는 내용이기 때문에 실제 onclick 이벤트리스너가 아니라 prop이다.
+  + ```<button onClick=click>``` 여기 들어가는 onClick은 이벤트리스너
+  + prop으로 넣은 onClick을 사용하고 싶으면 아래처럼 컴포넌트에 prop을 받아서 넣으면 된다.
+  ```js
+  function Btn({nameOfBtn, onClick}) {
+    return <button onClick={onClick} style={{
+      backgroundColor: "tomato",
+      color: "white",
+      padding: "10px 20px",
+      border: 0,
+      borderRadius: 10,
+    }}>{nameOfBtn}</button>;
+  }
+  ```
+
+## React Memo
+* Memorize: prop이 변경되지 않았다면 우리는 이 컴포넌트가 다시 그려지는 것을 원치 않는다고 기억하게 하는 것
+```js
+const MemorizedBtn = React.memo(Btn);
+
+<MemorizedBtn nameOfBtn={value} onClick={changeValue}/>
+<MemorizedBtn nameOfBtn="Confirm"/>
+```
+
+## Prop Types
+* props의 데이터타입이 무엇인지 알려줌 (예를 들어 fontSize에 String을 넘길 수도 있잖아)
+
+### import 및 적용
+* import
+```html
+<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+```
+
+* 적용
+```js
+Btn.propTypes = {
+  nameOfBtn: PropTypes.string.isRequired,
+  fontSize: PropTypes.number,
+};
+```
+  + ```isRequired```를 넣으면 이 값이 무조건 필요하다는 의미
+
+### default 값 설정하기
+```js
+function Btn({nameOfBtn, fontSize = 14})
+```
+* props 인자 안에 default 값을 설정할 수 있다.
+
+# CREATE REACT APP (CRA)
+## What is the create-react-app?
+* react 관련 라이브러리들의 집합체
+
+## 프로젝트 초기화
+* CRA를 사용하기 위해서 프로젝트를 새로 생성해야 함
+* 그리고 nodeJS 설치 해야 함
+* 뒤 이야기는 이제 다음 프로젝트에 이어서!
